@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// 引入全局样式（全局样式优先级低于自己组件的样式优先级）
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
