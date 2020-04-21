@@ -2,13 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // 引入全局样式（全局样式优先级低于自己组件的样式优先级）
 import './index.css';
+// 字体图标库样式
+import  './assets/fonts/iconfont.css'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  // <React.StrictMode>
+    <App />,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 
