@@ -20,7 +20,19 @@ class Home extends React.Component {
     }
     componentDidMount() {
         // 监听路由变化
-        this.props.history.listen((e) => {
+        // this.unlisten= this.props.history.listen((e) => {
+        //     // e 为location信息对象
+        //     if (e.pathname !== this.state.selectedTab) {
+        //         this.setState({
+        //             selectedTab: e.pathname
+        //         })
+        //     }
+        // })
+        this.listenRouter()
+    }
+    // 监听路由变化
+    listenRouter=() => {
+        this.unlisten= this.props.history.listen((e) => {
             // e 为location信息对象
             if (e.pathname !== this.state.selectedTab) {
                 this.setState({
@@ -29,7 +41,10 @@ class Home extends React.Component {
             }
         })
     }
-
+    // 解绑props.history路由监听事件
+    componentWillUnmount () {
+        this.unlisten()
+    }
     // 根据菜单配置渲染tabBar的items
     renderTabBarItems = () => {
         return tabItems.map((item) => {
