@@ -24,42 +24,41 @@ class Index extends React.Component {
     // this.getSwiperData()
     // this.getGroupData()
     // this.getNewsData()
-    // this.getAllData()
+    this.getAllData()
   }
   // Promise.all 封装获取接口数据方法
-  // getAllData = async () => {
-  //   try {
-  //     const methods = [getSwiper(), getGroup(), getNews()];
-  //     let res = await Promise.all(methods);
-  //     // console.log('all datas:', res);
-  //     this.setState({
-  //       data: res[0].data,
-  //       groupListData: res[1].data,
-  //       news: res[2].data
-  //     }, () => {
-  //       this.setState({
-  //         aplay: true
-  //       })
-  //     })
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-
-  // }
-  // 获取走马灯数据
-  getSwiperData = async () => {
-    const { status, data } = await getSwiper()
-    // console.log(data)
-    if (status === 200) {
+  getAllData = async () => {
+    try {
+      const methods = [getSwiper(), getGroup(), getNews()];
+      let res = await Promise.all(methods);
+      // console.log('all datas:', res);
       this.setState({
-        data,
+        data: res[0].data,
+        groupListData: res[1].data,
+        news: res[2].data
       }, () => {
         this.setState({
-          isPlay: true
+          aplay: true
         })
       })
+    } catch (error) {
+      console.log(error)
     }
   }
+  // 获取走马灯数据
+  // getSwiperData = async () => {
+  //   const { status, data } = await getSwiper()
+  //   // console.log(data)
+  //   if (status === 200) {
+  //     this.setState({
+  //       data,
+  //     }, () => {
+  //       this.setState({
+  //         isPlay: true
+  //       })
+  //     })
+  //   }
+  // }
   // 渲染走马灯ui
   renderCarousel = () => {
     return (
@@ -92,6 +91,8 @@ class Index extends React.Component {
 
     )
   }
+
+  
   // flex 布局展示
   showFlex = () => {
     return (
@@ -105,16 +106,18 @@ class Index extends React.Component {
       </Flex>
     )
   }
+
+  
   // 获取宫格小组数据
-  getGroupData = async () => {
-    const { status, data } = await getGroup()
-    // console.log(data)
-    if (status === 200) {
-      this.setState({
-        groupListData: data
-      })
-    }
-  }
+  // getGroupData = async () => {
+  //   const { status, data } = await getGroup()
+  //   // console.log(data)
+  //   if (status === 200) {
+  //     this.setState({
+  //       groupListData: data
+  //     })
+  //   }
+  // }
   // 渲染宫格小组ui 空标签的使用
   showGroup = () => {
     return (
@@ -145,6 +148,8 @@ class Index extends React.Component {
       </>
     )
   }
+
+
   // 渲染资讯列表UI
   showNews() {
     return this.state.news.map(item => (
@@ -167,15 +172,17 @@ class Index extends React.Component {
     ))
   }
   // 获取资讯列表数据
-  getNewsData = async () => {
-    const { status, data } = await getNews()
-    // console.log(data)
-    if (status === 200) {
-      this.setState({
-        news: data
-      })
-    }
-  }
+  // getNewsData = async () => {
+  //   const { status, data } = await getNews()
+  //   // console.log(data)
+  //   if (status === 200) {
+  //     this.setState({
+  //       news: data
+  //     })
+  //   }
+  // }
+
+
 
   // 渲染顶部搜索
   showTopNav = () => {
