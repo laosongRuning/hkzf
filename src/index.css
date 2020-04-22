@@ -12,20 +12,22 @@ h3,
 p,
 ul,
 dd {
-  margin: 0;
-  padding:0;
+    margin: 0;
+    padding: 0;
 }
 
-ul,li {    
+ul,
+li {
     list-style: none;
 }
 
 * {
-     touch-action: pan-y;
+    touch-action: pan-y;
     /*  touch-action: none;  */
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 /* 全局样式 */
-#root,.app {
-height: 100%;
+#root,
+.App {
+    height: 100%;
 }

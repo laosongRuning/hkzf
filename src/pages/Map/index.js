@@ -16,9 +16,6 @@ class Map extends React.Component {
         map.centerAndZoom(point, 15);
     }
 
-
-
-
     render() {
         return (
             <div className="mapBox">
