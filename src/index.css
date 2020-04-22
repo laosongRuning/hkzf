@@ -25,3 +25,7 @@ ul,li {
     /*  touch-action: none;  */
     box-sizing: border-box; 
 }
+/* 全局样式 */
+#root,.app {
+height: 100%;
+}
