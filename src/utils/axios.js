@@ -4,7 +4,8 @@ import axios from 'axios'
 import { Toast } from 'antd-mobile'
 
 // 后台接口的基础地址
-const BASE_URL = 'http://api-haoke-dev.itheima.net';
+// const BASE_URL = 'https://api-haoke-dev.itheima.net';
+const BASE_URL = 'https://api-haoke-web.itheima.net '; // 项目部署不支持跨域，换了这个基地址
 // 创建axios的实例
 const instance = axios.create({
   baseURL: BASE_URL
