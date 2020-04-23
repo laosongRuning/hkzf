@@ -1,8 +1,9 @@
 import React from 'react'
-import { Carousel, Flex, Grid, WingBlank,SearchBar } from 'antd-mobile'
+import { Carousel, Flex, Grid, WingBlank, SearchBar } from 'antd-mobile'
 import { BASE_URL } from '../../utils/axios'
-import { getCityInfo } from '../../utils/api/city'
+// import { getCityInfo } from '../../utils/api/city'
 import { getSwiper, getGroup, getNews } from '../../utils/api/Home'
+import { getCurCity } from '../../utils/api/index'
 // 导入栏目导航的数据
 import navs from '../../utils/navs'
 import './index.scss'
@@ -53,18 +54,25 @@ class Index extends React.Component {
   }
 
   // 获取当前城市信息
-  getCurrCity = () => {
-    // 使用百度地图LocalCity类获取当前城市名字
-    const myCity = new window.BMap.LocalCity();
-    myCity.get(async (result) => {
-      // 根据百度地图获取到城市名字，调用后台接口获取当前城市的详细数据
-      let res = await getCityInfo(result.name);
-      console.log(res);
-      // 显示到页面上
-      res.status === 200 && this.setState({
-        currCity: res.data
-      })
-    });
+  // getCurrCity = () => {
+  //   // 使用百度地图LocalCity类获取当前城市名字
+  //   const myCity = new window.BMap.LocalCity();
+  //   myCity.get(async (result) => {
+  //     // 根据百度地图获取到城市名字，调用后台接口获取当前城市的详细数据
+  //     let res = await getCityInfo(result.name);
+  //     console.log(res);
+  //     // 显示到页面上
+  //     res.status === 200 && this.setState({
+  //       currCity: res.data
+  //     })
+  //   });
+  // }
+  // 获取当前城市信息
+  getCurrCity = async () => {
+    const res = await getCurCity()
+    this.setState({
+      currCity: res.data
+    })
   }
 
 
@@ -115,7 +123,7 @@ class Index extends React.Component {
     )
   }
 
-  
+
   // flex 布局展示
   showFlex = () => {
     return (
@@ -130,7 +138,7 @@ class Index extends React.Component {
     )
   }
 
-  
+
   // 获取宫格小组数据
   // getGroupData = async () => {
   //   const { status, data } = await getGroup()
@@ -212,7 +220,7 @@ class Index extends React.Component {
     return (
       <Flex justify="around" className="topNav">
         <div className="searchBox">
-          <div className="city" onClick={()=>{
+          <div className="city" onClick={() => {
             this.props.history.push('/citylist')
           }}>
             {this.state.currCity.label}
@@ -224,7 +232,7 @@ class Index extends React.Component {
             placeholder="请输入小区或地址"
           />
         </div>
-        <div className="map" onClick={()=>{
+        <div className="map" onClick={() => {
           this.props.history.push('/map')
         }}>
           <i key="0" className="iconfont icon-map" />
