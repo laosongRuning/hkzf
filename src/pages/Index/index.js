@@ -1,6 +1,7 @@
 import React from 'react'
 import { Carousel, Flex, Grid, WingBlank,SearchBar } from 'antd-mobile'
 import { BASE_URL } from '../../utils/axios'
+import { getCityInfo } from '../../utils/api/city'
 import { getSwiper, getGroup, getNews } from '../../utils/api/Home'
 // 导入栏目导航的数据
 import navs from '../../utils/navs'
@@ -8,6 +9,10 @@ import './index.scss'
 // import axios from 'axios'
 class Index extends React.Component {
   state = {
+    currCity: {
+      label: '--',
+      value: ''
+    },
     // 咨询列表数据
     news: [],
     // 宫格数据
@@ -45,6 +50,23 @@ class Index extends React.Component {
       console.log(error)
     }
   }
+
+  // 获取当前城市信息
+  getCurrCity = () => {
+    // 使用百度地图LocalCity类获取当前城市名字
+    const myCity = new window.BMap.LocalCity();
+    myCity.get(async (result) => {
+      // 根据百度地图获取到城市名字，调用后台接口获取当前城市的详细数据
+      let res = await getCityInfo(result.name);
+      console.log(res);
+      // 显示到页面上
+      res.status === 200 && this.setState({
+        currCity: res.data
+      })
+    });
+  }
+
+
   // 获取走马灯数据
   // getSwiperData = async () => {
   //   const { status, data } = await getSwiper()
@@ -192,7 +214,8 @@ class Index extends React.Component {
           <div className="city" onClick={()=>{
             this.props.history.push('/citylist')
           }}>
-            北京<i className="iconfont icon-arrow" />
+            {this.state.currCity.label}
+            <i className="iconfont icon-arrow" />
           </div>
           <SearchBar
             value={this.state.keyword}
