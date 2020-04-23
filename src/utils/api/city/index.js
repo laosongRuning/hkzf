@@ -9,3 +9,13 @@ export function getCityInfo(name) {
         }
     })
 }
+
+// 城市详细信息获取数据
+export function getCityList(leave=1) {
+    return instance.get(`/area/info/${leave}`)
+}
+// 热门城市信息获取数据
+export function getCityHot() {
+    return instance.get(`/area/hot`)
+}
+
