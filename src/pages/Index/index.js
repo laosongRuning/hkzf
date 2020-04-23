@@ -30,6 +30,7 @@ class Index extends React.Component {
     // this.getGroupData()
     // this.getNewsData()
     this.getAllData()
+    this.getCurrCity()
   }
   // Promise.all 封装获取接口数据方法
   getAllData = async () => {

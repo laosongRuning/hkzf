@@ -12,7 +12,11 @@ export function getCityInfo(name) {
 
 // 城市详细信息获取数据
 export function getCityList(leave=1) {
-    return instance.get(`/area/info/${leave}`)
+    return instance.get(`/area/city`,{
+        params: {
+            leave,
+        }
+    })
 }
 // 热门城市信息获取数据
 export function getCityHot() {
