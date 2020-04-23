@@ -3,7 +3,7 @@ import './index.scss'
 import { NavBar, Icon } from 'antd-mobile';
 class Map extends React.Component {
     componentDidMount() {
-
+        this.initMap()
     }
     // 初始化地图
     initMap = () => {
