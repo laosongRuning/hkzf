@@ -103,7 +103,7 @@ class CityList extends React.Component {
             <div key={key} style={style} className="city-item">
                 <div className="title">{this.formmatLetter(letter)}</div>
                 {
-                    item.map((item) => <div key={item.value} onClick={() => {
+                    item.map((item) => <div  className="name" key={item.value} onClick={() => {
                         this.changeCity(item)
                     }}>{item.label}</div>)
                 }
