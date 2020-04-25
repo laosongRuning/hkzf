@@ -68,11 +68,14 @@ class Index extends React.Component {
   //   });
   // }
   // 获取当前城市信息
-  getCurrCity = async () => {
-    const res = await getCurCity()
+  async getCurrCity() {
+    let data = await getCurCity();
     this.setState({
-      currCity: res.data
+      currCity: data
+    }, () => {
+      this.getAllData();
     })
+
   }
 
 

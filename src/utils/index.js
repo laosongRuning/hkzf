@@ -29,7 +29,9 @@ export function delSession(key) {
 
 export async function getCurCity() {
     // 先从本地获取之前保存的城市详细信息
-    let curcity = JSON.parse(getSession(CRE_CITY))
+    const curcity =typeof getSession(CRE_CITY)=='string'?JSON.parse(getSession(CRE_CITY)):getSession(CRE_CITY)
+    // const curcity = JSON.parse(getSession(CRE_CITY))
+    // JSON.parse(getSession(CRE_CITY))
 
     // 获取当前城市名字，如果改变需重新调取接口更新数据
     let res = await getMycity()
@@ -41,7 +43,7 @@ export async function getCurCity() {
         // 根据百度地图获取到城市名字，调用后台接口获取当前城市的详细数据
         return new Promise(async (resolve, reject) => {
             let res = await getCityInfo(rea_name);
-            // console.log(res);
+            // console.log(res)
             // 显示到页面上
             if (res.status === 200) {
                 // 存储到本地

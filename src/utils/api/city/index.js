@@ -10,16 +10,12 @@ export function getCityInfo(name) {
     })
 }
 
-// 城市详细信息获取数据
-export function getCityList(leave=1) {
-    return instance.get(`/area/city`,{
-        params: {
-            leave,
-        }
-    })
-}
+// 获取城市列表数据
+export const getCityList = (level = 1) => {
+    return instance.get(`/area/city?level=${level}`)
+  }
 // 热门城市信息获取数据
 export function getCityHot() {
-    return instance.get(`/area/hot`)
+    return instance.get('/area/hot')
 }
 

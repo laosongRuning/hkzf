@@ -1,5 +1,5 @@
 import React from 'react'
-import { getCityList, getCityHot } from '../../utils/api/city/index'
+import { getCityList, getCityHot } from '../../utils/api/city'
 import { getCurCity, CRE_CITY, setSession } from '../../utils/index'
 import { List, AutoSizer } from 'react-virtualized'
 import './index.scss'
@@ -8,6 +8,7 @@ class CityList extends React.Component {
     state = {
         cityList: {},
         cityIndex: [],
+        // 当前位置的索引,激活索引样式状态
         activeIndex: 0
     }
     componentDidMount() {
@@ -16,6 +17,7 @@ class CityList extends React.Component {
     // 获取城市列表数据
     getCityList = async () => {
         const { status, data } = await getCityList()
+        console.log(status,data)
         if (status === 200) {
             let { cityList, cityIndex } = this.formmatData(data)
             // 加入热门城市数据
@@ -58,7 +60,7 @@ class CityList extends React.Component {
 
     // 格式化列表title
     // 格式化字母（处理热门城市和当前城市）
-    formatLetter(letter, first) {
+    formmatLetter(letter, first) {
         switch (letter) {
             case 'hot':
                 return first ? '热' : '热门城市';
@@ -122,7 +124,7 @@ class CityList extends React.Component {
 
     // 渲染右侧索引
     renderCityIndex = () => {
-        const { cityIndex } = this.state;
+        const { cityIndex,activeIndex } = this.state;
         return cityIndex.map((item, index) => {
             return (
                 <li
@@ -133,8 +135,8 @@ class CityList extends React.Component {
                         this.refList.scrollToRow(index)
                     }}
                 >
-                    <span className={0 === index ? 'index-active' : ''}>
-                        {this.formatLetter(item, true)}
+                    <span className={activeIndex === index ? 'index-active' : ''}>
+                        {this.formmatLetter(item, true)}
                     </span>
                 </li>
             )
@@ -169,9 +171,9 @@ class CityList extends React.Component {
                             ref={(e) => { this.refList = e }}
                             scrollToAlignment="start"
                             onRowsRendered={this.onRowsRendered}
-                            height={this.getRowheight}
+                            height={height}
                             rowCount={this.state.cityIndex.length}
-                            rowHeight={20}
+                            rowHeight={this.getRowheight}
                             rowRenderer={this.rowRenderer}
                             width={width}
                         />

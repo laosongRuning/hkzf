@@ -76,7 +76,7 @@ export default class Filter extends Component {
         <div className={styles.content}>
           {/* 前三个菜单的遮罩层 */}
           {
-            this.isShow() ? <div className={styles.mask}  onClick={this.onCancel}/> : null
+            this.isShow? <div className={styles.mask}  onClick={this.onCancel}/> : null
           }
           {/* 标题栏 */}
           <FilterTitle onTitleClick={this.onTitleClick} titleSelectedStatus={this.state.titleSelectedStatus} />
