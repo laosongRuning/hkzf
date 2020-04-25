@@ -1,8 +1,14 @@
 import React from 'react'
 import { getCityList, getCityHot } from '../../utils/api/city'
+import { getCurCity, CRE_CITY, setsession } from '../../utils/api/index'
+import { List, AutoSizer } from 'react-virtualized'
+import './index.scss'
+import { NavBar, Icon, Toast } from 'antd-mobile'
 class CityList extends React.Component {
     state = {
-
+        cityList: {},
+        cityIndex: [],
+        activeIndex: 0
     }
     componentDidMount() {
         this.getCityList()
@@ -17,8 +23,15 @@ class CityList extends React.Component {
             if (st === 200) {
                 cityIndex.unshift('hot')
                 cityList['hot'] = da
-
             }
+            const res = await getCurCity()
+            cityList['#'] = [res]
+            cityIndex.unshift('#')
+            this.setState({
+                cityList,
+                cityIndex
+            })
+
         }
     }
     // 改造后台数据
@@ -43,14 +56,131 @@ class CityList extends React.Component {
         }
     }
 
+    // 格式化列表title
+    // 格式化字母（处理热门城市和当前城市）
+    formatLetter(letter, first) {
+        switch (letter) {
+            case 'hot':
+                return first ? '热' : '热门城市';
+            case '#':
+                return first ? '当' : '当前城市';
+            default:
+                return letter.toUpperCase();
+        }
+    }
+
+    // 切换城市
+    changeCity = (city) => {
+        const hasData = ['北京', '上海', '广州', '深圳'];
+        if (hasData.includes(city.label)) {
+            setsession(CRE_CITY, JSON.stringify(city));
+            this.props.history.goBack()
+            // this.props.history.push('/')
+        } else {
+            Toast.info('该城市暂无房源数据！', 2)
+        }
+    }
 
 
+    // 数据
+    // 渲染列表项
+    rowRenderer = ({
+        key, // Unique key within array of rows
+        index, // Index of row within collection
+        isScrolling, // The List is currently being scrolled
+        isVisible, // This row is visible within the List (eg it is not an overscanned row)
+        style // Style object to be applied to row (to position it)
+    }) => {
+        // 获取处理完的数据
+        const { cityIndex, cityList } = this.state
+        // 数据的键
+        const letter = cityIndex[index]
+        // 数据的值
+        let item = cityList[letter]
+        return (
+            <div key={key} style={style} className="city-item">
+                <div className="title">{this.formmatLetter(letter)}</div>
+                {
+                    item.map((item) => <div key={item.value} onClick={() => {
+                        this.changeCity(item)
+                    }}>{item.label}</div>)
+                }
+            </div>
+        )
+    }
 
 
+    // 动态计算高度
+    // 动态获取行高
+    getRowheight = ({ index }) => {
+        const { cityIndex, cityList } = this.state;
+        let letter = cityIndex[index];
+        // title高度+城市高度*城市个数
+        return 36 + 50 * cityList[letter].length
+    }
+
+
+    // 渲染右侧索引
+    renderCityIndex = () => {
+        const { cityIndex } = this.state;
+        return cityIndex.map((item, index) => {
+            return (
+                <li
+                    key={item}
+                    className="city-index-item"
+                    onClick={() => {
+                        // 点击的时候定位列表
+                        this.refList.scrollToRow(index)
+                    }}
+                >
+                    <span className={0 === index ? 'index-active' : ''}>
+                        {this.formatLetter(item, true)}
+                    </span>
+                </li>
+            )
+        })
+    }
+
+    // 滚动列表触发(每次重新渲染列表后都会触发)
+    onRowsRendered = ({ startIndex }) => {
+        if (this.state.activeIndex !== startIndex) {
+            // console.log(startIndex);
+            this.setState({
+                activeIndex: startIndex
+            })
+        }
+    }
 
     render() {
         return (
-            <div>城市列表</div>
+            <div className="cityList">
+                {/* 导航返回 */}
+                <NavBar
+                    mode="dark"
+                    icon={<Icon type="left" />}
+                    onLeftClick={() => this.props.history.goBack()}
+                >
+                    城市选择
+                </NavBar>
+                {/* 城市列表 */}
+                <AutoSizer>
+                    {({ height, width }) => (
+                        <List
+                            ref={(e) => { this.refList = e }}
+                            scrollToAlignment="start"
+                            height={this.getRowheight}
+                            rowCount={this.state.cityIndex.length}
+                            rowHeight={20}
+                            rowRenderer={this.rowRenderer}
+                            width={width}
+                        />
+                    )}
+                </AutoSizer>
+                {/* 右侧索引列表 */}
+                <ul className="city-index">
+                    {this.renderCityIndex()}
+                </ul>
+            </div>
         )
     }
 }

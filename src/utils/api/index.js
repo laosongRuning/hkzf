@@ -13,15 +13,28 @@ const getMycity = async () => {
         })
     })
 }
-
+export {CRE_CITY}
+// 封装本地储存方法
+export function setsession(key,val) {
+    sessionStorage.setItem(key,val)
+}
+// 获取本地数据
+export function getsession(key) {
+    sessionStorage.setItem(key)
+}
+// 删除本剧数据方法
+export function delsession(key) {
+    sessionStorage.removeItem(key)
+}
 
 export async function getCurCity() {
     // 先从本地获取之前保存的城市详细信息
-    let curcity = JSON.parse(localStorage.getItem(CRE_CITY))
+    let curcity = JSON.parse(getsession(CRE_CITY))
 
     // 获取当前城市名字，如果改变需重新调取接口更新数据
     let res = await getMycity()
     let rea_name = res.substr(0, 2)
+    // if (!curcity) {
     if (!curcity || rea_name !== curcity.label) {
         // 如果没有就重新获取定位详细信息
         // 使用百度地图LocalCity类获取当前城市名字
@@ -32,7 +45,7 @@ export async function getCurCity() {
             // 显示到页面上
             if (res.status === 200) {
                 // 存储到本地
-                localStorage.setItem(CRE_CITY, JSON.stringify(res.data))
+                setsession(CRE_CITY, JSON.stringify(res.data))
                 // 传递Promise结果
                 resolve(res.data)
             } else {
