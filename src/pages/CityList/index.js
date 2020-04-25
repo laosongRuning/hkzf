@@ -1,6 +1,6 @@
 import React from 'react'
-import { getCityList, getCityHot } from '../../utils/api/city'
-import { getCurCity, CRE_CITY, setsession } from '../../utils/api/index'
+import { getCityList, getCityHot } from '../../utils/api/city/index'
+import { getCurCity, CRE_CITY, setSession } from '../../utils/index'
 import { List, AutoSizer } from 'react-virtualized'
 import './index.scss'
 import { NavBar, Icon, Toast } from 'antd-mobile'
@@ -73,7 +73,7 @@ class CityList extends React.Component {
     changeCity = (city) => {
         const hasData = ['北京', '上海', '广州', '深圳'];
         if (hasData.includes(city.label)) {
-            setsession(CRE_CITY, JSON.stringify(city));
+            setSession(CRE_CITY, JSON.stringify(city));
             this.props.history.goBack()
             // this.props.history.push('/')
         } else {
@@ -168,6 +168,7 @@ class CityList extends React.Component {
                         <List
                             ref={(e) => { this.refList = e }}
                             scrollToAlignment="start"
+                            onRowsRendered={this.onRowsRendered}
                             height={this.getRowheight}
                             rowCount={this.state.cityIndex.length}
                             rowHeight={20}

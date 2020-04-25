@@ -1,11 +1,19 @@
 import React from 'react'
 
-class House extends React.Component{
-    render () {
-        return(
-            <div>列表找房</div>
-        )
-    }
-}
+import { Flex } from 'antd-mobile'
 
-export default House
+import Filter from './components/Filter'
+// 导入样式  styles名字随便起   from './xxx.module.css'(module是固定写法)
+import styles from './index.module.css'
+
+
+export default class HouseList extends React.Component {
+  render() {
+    return (
+      <div className={styles.root}>
+        {/* 条件筛选栏 */}
+        <Filter />
+      </div>
+    )
+  }
+}

@@ -1,8 +1,8 @@
 // 全局公共方法
-import { getCityInfo } from '../api/city'
+import { getCityInfo } from '../utils/api/city'
 // 返回Peomise对象=》外边可以通过async  await接收
 // 城市详细信息应该存储到本地
-const CRE_CITY = 'cur_city'
+export const CRE_CITY = 'hkzf_city'
 
 // 进行城市比对方法
 const getMycity = async () => {
@@ -13,23 +13,23 @@ const getMycity = async () => {
         })
     })
 }
-export {CRE_CITY}
+
 // 封装本地储存方法
-export function setsession(key,val) {
+export function setSession(key,val) {
     sessionStorage.setItem(key,val)
 }
 // 获取本地数据
-export function getsession(key) {
-    sessionStorage.setItem(key)
+export function getSession(key) {
+    sessionStorage.getItem(key)
 }
 // 删除本剧数据方法
-export function delsession(key) {
+export function delSession(key) {
     sessionStorage.removeItem(key)
 }
 
 export async function getCurCity() {
     // 先从本地获取之前保存的城市详细信息
-    let curcity = JSON.parse(getsession(CRE_CITY))
+    let curcity = JSON.parse(getSession(CRE_CITY))
 
     // 获取当前城市名字，如果改变需重新调取接口更新数据
     let res = await getMycity()
@@ -45,7 +45,7 @@ export async function getCurCity() {
             // 显示到页面上
             if (res.status === 200) {
                 // 存储到本地
-                setsession(CRE_CITY, JSON.stringify(res.data))
+                setSession(CRE_CITY,JSON.stringify(res.data))
                 // 传递Promise结果
                 resolve(res.data)
             } else {
