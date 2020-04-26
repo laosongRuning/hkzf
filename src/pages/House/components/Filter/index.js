@@ -19,6 +19,7 @@ const titleSelectedStatus = {
 }
 // 选中数据维护(测试)
 const selectedValues = {
+  // 默认值没有选中
   area: ['area', 'null'],
   // area: ['area', 'AREA|69cc5f6d-4f29-a77c', 'AREA|73aa1890-64c7-51d9'],
   mode: ['null'],
@@ -117,6 +118,7 @@ export default class Filter extends Component {
         value={curval}
         data={data}
         clos={clos}
+        key={openType}
         onCancel={this.onCancel}
         onOk={this.onOk} />
     }
