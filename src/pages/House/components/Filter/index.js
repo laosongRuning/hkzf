@@ -53,8 +53,11 @@ export default class Filter extends Component {
 
   // 关闭前三个筛选器内容和遮罩层
   onCancel = () => {
+    // 处理高亮
+    let newSel = this.handlerSel()
     this.setState({
-      openType: ''
+      openType: '',
+      titleSelectedStatus: newSel
     })
   }
 
@@ -64,8 +67,11 @@ export default class Filter extends Component {
     // 存储到组件实例上
     let { openType } = this.state
     this.selectedValues[openType] = val
+    // 处理高亮
+    let newSel = this.handlerSel();
     this.setState({
-      openType: ''
+      openType: '',
+      titleSelectedStatus: newSel
     })
   }
   componentDidMount() {
@@ -124,6 +130,52 @@ export default class Filter extends Component {
     }
   }
 
+  // 处理筛选器选中后有无条件的高亮状态
+  handlerSel = () => {
+    // 创建新的标题选中状态对象
+    const newTitleSelectedStatus = {};
+    // 遍历selectedValues
+    Object.keys(this.selectedValues).forEach((key) => {
+      // 获取当前过滤器选中值=》数组
+      let cur = this.selectedValues[key];
+      // 判断数组的值
+      if (
+        (key === 'area') && (cur[1] !==
+          "null" || cur[0] === 'subway')) {
+        newTitleSelectedStatus[key] = true
+      } else if (key === 'mode' && cur[0] !== "null") {
+        newTitleSelectedStatus[key] = true
+      } else if (key === 'price' && cur[0] !== "null") {
+        newTitleSelectedStatus[key] = true
+      }
+      // 后续处理
+      else if (key === 'more' && cur.length !== 0) {
+        // 更多选择项 FilterMore 组件情况
+        newTitleSelectedStatus[key] = true
+      } else {
+        newTitleSelectedStatus[key] = false
+      }
+    })
+    return newTitleSelectedStatus
+  }
+
+  renderFilterMore = () => {
+    const { openType } = this.state;
+    if (openType === 'more') {
+      console.log(this.filterData);
+      // 传递筛选器数据
+      const { roomType, oriented, floor, characteristic } = this.filterData;
+      const data = { roomType, oriented, floor, characteristic }
+      return <FilterMore
+        data={data}
+        value={this.selectedValues[openType]}
+        onOk={this.onOk}
+        onCancel={this.onCancel}
+      />
+    }
+    return null
+  }
+
   render() {
     return (
       <div className={styles.root}>
@@ -145,6 +197,9 @@ export default class Filter extends Component {
 
           {/* 最后一个菜单对应的内容： */}
           {/* <FilterMore /> */}
+          {
+            this.renderFilterMore()
+          }
         </div>
       </div>
     )
