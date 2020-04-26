@@ -91,6 +91,11 @@ export default class FilterPicker extends Component {
   state = {
     value:this.props.value
   }
+  handlerChange = (value) => {
+    this.setState({
+      value
+    })
+  }
   render() {
     // 接收数据
     const { onCancel, onOk, data, cols } = this.props
@@ -98,11 +103,7 @@ export default class FilterPicker extends Component {
       <>
         {/* 选择器组件： */}
         <PickerView value={this.state.value}
-          onChange={(val) => {
-            this.setState({
-              value: val
-            })
-          }} data={data} cols={cols} />
+          onChange={this.handlerChange} data={data} cols={cols} />
 
         {/* 底部按钮 */}
         <FilterFooter onOK={()=> {

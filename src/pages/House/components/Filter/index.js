@@ -72,6 +72,9 @@ export default class Filter extends Component {
     this.setState({
       openType: '',
       titleSelectedStatus: newSel
+    }, () => {
+      // 处理筛选条件数据
+      this.handlerFilters(this.selectedValues)
     })
   }
   componentDidMount() {
@@ -117,8 +120,6 @@ export default class Filter extends Component {
         default:
           break;
       }
-
-
       return <FilterPicker
         // 传递当前选中的筛选数据
         value={curval}
@@ -127,6 +128,8 @@ export default class Filter extends Component {
         key={openType}
         onCancel={this.onCancel}
         onOk={this.onOk} />
+    } else {
+      return null
     }
   }
 
@@ -176,6 +179,36 @@ export default class Filter extends Component {
     return null
   }
 
+  // 处理后台需要的筛选条件数据
+  handlerFilters = (selectedValues) => {
+    // 筛选条件数据
+    const { area, mode, price, more } = selectedValues;
+    // 组装数据
+    const filters = {};
+    // area | subway
+    let areaKey = area[0], aval;
+    if (area.length === 2) {
+      aval = area[1]
+    } else {
+      if (area[2] !== 'null') {
+        aval = area[2]
+      } else {
+        aval = area[1]
+      }
+    }
+    filters[areaKey] = aval;
+    // mode
+    filters.rentType = mode[0]
+    // price
+    filters.price = price[0]
+    // more
+    filters.more = more.join(',')
+    console.log('filters:', filters);
+    return filters
+  }
+
+
+
   render() {
     return (
       <div className={styles.root}>
@@ -185,7 +218,7 @@ export default class Filter extends Component {
         <div className={styles.content}>
           {/* 前三个菜单的遮罩层 */}
           {
-            this.isShow ? <div className={styles.mask} onClick={this.onCancel} /> : null
+            this.isShowPicker() ? <div className={styles.mask} onClick={this.onCancel} /> : null
           }
           {/* 标题栏 */}
           <FilterTitle onTitleClick={this.onTitleClick} titleSelectedStatus={this.state.titleSelectedStatus} />
