@@ -33,14 +33,14 @@ export default class Filter extends Component {
   // 设置状态
   state = {
     titleSelectedStatus: { ...titleSelectedStatus },
-    opentype: ''
+    openType: ''
 
   }
   onTitleClick = type => {
     // console.log(type)
     this.setState({
       titleSelectedStatus: { ...titleSelectedStatus, [type]: true },
-      opentype: type
+      openType: type
     })
   }
 
