@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
 import { Link } from 'react-router-dom'
-import { Grid, Button } from 'antd-mobile'
-
+import { Grid, Button, Toast } from 'antd-mobile'
+import { getUserInfo } from '../../utils/api/user'
 import { BASE_URL } from '../../utils/axios'
-
+import { isAuth, getToken } from '../../utils/index'
 import styles from './index.module.css'
 
 // 菜单数据
@@ -25,42 +25,61 @@ const menus = [
 const DEFAULT_AVATAR = BASE_URL + '/img/profile/avatar.png'
 
 export default class Profile extends Component {
-  render() {
-    const { history } = this.props
+  // 设置状态数据
+  state = {
+    isLogin: isAuth(),
+    userInfo: {}
+  }
+  componentDidMount() {
+    this.getUserInfos()
+  }
+  // 获取用户数据 
+  getUserInfos = async () => {
+    const { isLogin } = this.state;
+    if (isLogin) {
+      let res = await getUserInfo(getToken())
+      console.log(res);
+      if (res.status === 200) {
+        // 处理图片路径
+        res.data.avatar = BASE_URL + res.data.avatar;
+        this.setState({
+          userInfo: res.data
+        })
+      } else {
+        Toast.info(res.description)
+      }
+    }
+  }
 
-    return (
-      <div className={styles.root}>
-        {/* 个人信息 */}
-        <div className={styles.title}>
-          <img
-            className={styles.bg}
-            src={BASE_URL + '/img/profile/bg.png'}
-            alt="背景图"
-          />
-          {/* 用户信息部分 */}
-          <div className={styles.info}>
-            <div className={styles.myIcon}>
-              <img className={styles.avatar} src={DEFAULT_AVATAR} alt="icon" />
-            </div>
-            <div className={styles.user}>
-              <div className={styles.name}>游客</div>
-              {/* 登录后展示： */}
-              {/* <>
+  // 渲染用户信息
+  renderUser() {
+    const { history } = this.props;
+    const { userInfo: { nickname, avatar } } = this.state;
+    return (<div className={styles.title}>
+      <img
+        className={styles.bg}
+        src={BASE_URL + '/img/profile/bg.png'}
+        alt="背景图"
+      />
+      <div className={styles.info}>
+        <div className={styles.myIcon}>
+          <img className={styles.avatar} src={avatar || DEFAULT_AVATAR} alt="icon" />
+        </div>
+        <div className={styles.user}>
+          <div className={styles.name}>{nickname || '游客'}</div>
+          {
+            this.state.isLogin ? (
+              <>
                 <div className={styles.auth}>
                   <span onClick={this.logout}>退出</span>
                 </div>
-                  <div className={styles.edit} onClick={
-                    () => history.push('/rent/add')
-                  }>
-                    发布房源
-                  <span className={styles.arrow}>
+                <div className={styles.edit}>
+                  编辑个人资料
+                    <span className={styles.arrow}>
                     <i className="iconfont icon-arrow" />
                   </span>
                 </div>
-              </> */}
-
-              {/* 未登录展示： */}
-              <div className={styles.edit}>
+              </>) : (<div className={styles.edit}>
                 <Button
                   type="primary"
                   size="small"
@@ -68,12 +87,22 @@ export default class Profile extends Component {
                   onClick={() => history.push('/login')}
                 >
                   去登录
-                </Button>
-              </div>
-            </div>
-          </div>
+              </Button>
+              </div>)
+          }
         </div>
+      </div>
+    </div>)
+  }
 
+
+  render() {
+    // const { history } = this.props
+
+    return (
+      <div className={styles.root}>
+        {/* 个人信息 */}
+        {this.renderUser()}
         {/* 九宫格菜单 */}
         <Grid
           data={menus}

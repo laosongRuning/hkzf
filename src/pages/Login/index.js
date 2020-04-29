@@ -130,7 +130,7 @@ export default withFormik({
     if (status === 200) {
       setSession(ZFW_TOKEN, body.token)
       Toast.success(description, 2)
-      formikBag.props.history.push('/')
+      formikBag.props.history.push('/home/profile')
     } else {
       Toast.fail(description)
     }
