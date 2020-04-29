@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Flex, WingBlank, WhiteSpace, NavBar, Toast } from 'antd-mobile'
-import { setSession, ZFW_TOKEN } from '../../utils/index'
+import { setToken, ZFW_TOKEN } from '../../utils/index'
 import { Link } from 'react-router-dom'
 import { login } from '../../utils/api/user'
 import styles from './index.module.css'
@@ -125,10 +125,11 @@ export default withFormik({
       username,
       password
     })
-    // console.log(res)
-    const { status, body, description } = res.data
+    console.log(res)
+    const {status, data, description } = res
     if (status === 200) {
-      setSession(ZFW_TOKEN, body.token)
+      
+      setToken(data.token)
       Toast.success(description, 2)
       formikBag.props.history.push('/home/profile')
     } else {

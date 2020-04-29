@@ -1,7 +1,7 @@
 // 用户相关的所有的接口
 // import instance from '../../axios'
 import instance from '../../axios'
-import { getToken } from '../..'
+import { getToken } from '../../index'
 
 export function login(data) {
     return instance.post('/user/login',data)

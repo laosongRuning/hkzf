@@ -39,7 +39,8 @@ export function getToken() {
 }
 
 // 用户鉴权（用户是否登陆）
-export const isAuth= ()=> !!getToken()
+const isAuth = () => !!getToken()
+export {isAuth}
 
 
 export async function getCurCity() {

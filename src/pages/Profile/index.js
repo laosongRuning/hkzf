@@ -31,10 +31,12 @@ export default class Profile extends Component {
     userInfo: {}
   }
   componentDidMount() {
-    this.getUserInfos()
+    this.getUserInfo()
   }
   // 获取用户数据 
-  getUserInfos = async () => {
+  getUserInfo = async () => {
+    console.log(this.state.isLogin)
+
     const { isLogin } = this.state;
     if (isLogin) {
       let res = await getUserInfo(getToken())
@@ -46,6 +48,7 @@ export default class Profile extends Component {
           userInfo: res.data
         })
       } else {
+        delToken()
         Toast.info(res.description)
       }
     }
