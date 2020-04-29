@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
 import { Link } from 'react-router-dom'
-import { Grid, Button, Toast } from 'antd-mobile'
-import { getUserInfo } from '../../utils/api/user'
+import { Grid, Button, Toast,Modal } from 'antd-mobile'
+import { getUserInfo,logout } from '../../utils/api/user'
 import { BASE_URL } from '../../utils/axios'
-import { isAuth, getToken } from '../../utils/index'
+import { isAuth, getToken,delToken } from '../../utils/index'
 import styles from './index.module.css'
 
 // 菜单数据
@@ -50,7 +50,29 @@ export default class Profile extends Component {
       }
     }
   }
-
+  // 退出登陆
+  logout = () => {
+    Modal.alert('提示', '确定退出吗？', [
+      { text: '取消' },
+      {
+        text: '确定', onPress: async () => {
+          let res = await logout();
+          // console.log(res)
+          if (res.status === 200) {
+            Toast.info(res.description,2)
+            delToken()
+            this.setState({
+              isLogin: false,
+              userInfo: {}
+            })
+          } else {
+            // token 过期处理
+            this.props.history.push('/login')
+          }
+        }
+      },
+    ])
+  }
   // 渲染用户信息
   renderUser() {
     const { history } = this.props;
