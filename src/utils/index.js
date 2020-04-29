@@ -2,7 +2,7 @@
 import { getCityInfo } from '../utils/api/city'
 // 返回Peomise对象=》外边可以通过async  await接收
 // 城市详细信息应该存储到本地
-export const CRE_CITY = 'hkzf_city',ZFW_TOKEN= 'ZFW_TOKEN'
+export const CRE_CITY = 'hkzf_city',ZFW_TOKEN= 'ZFW_TOKEN',Auth
 
 // 进行城市比对方法
 const getMycity = async () => {
@@ -26,6 +26,21 @@ export function getSession(key) {
 export function delSession(key) {
     sessionStorage.removeItem(key)
 }
+
+// 封装持久化token相关方法
+export function setToken(token) {
+    setSession(ZFW_TOKEN,token)
+}
+export function delToken() {
+    delSession(ZFW_TOKEN)
+}
+export function getToken() {
+    return getSession(ZFW_TOKEN)
+}
+
+// 用户鉴权（用户是否登陆）
+const Auth= ()=> !!getToken()
+
 
 export async function getCurCity() {
     // 先从本地获取之前保存的城市详细信息
