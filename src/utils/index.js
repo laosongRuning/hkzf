@@ -2,7 +2,7 @@
 import { getCityInfo } from '../utils/api/city'
 // 返回Peomise对象=》外边可以通过async  await接收
 // 城市详细信息应该存储到本地
-export const CRE_CITY = 'hkzf_city'
+export const CRE_CITY = 'hkzf_city',ZFW_TOKEN= 'ZFW_TOKEN'
 
 // 进行城市比对方法
 const getMycity = async () => {

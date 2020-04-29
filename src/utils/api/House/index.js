@@ -22,3 +22,8 @@ export function getHouseList(cityId,filters,start,end) {
         }
     })
 }
+
+// 根据房源id获取房源详情
+export function getFilterId(id) {
+    return instance.get(`/houses/${id}`)
+}

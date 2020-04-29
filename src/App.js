@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import CityList from './pages/CityList'
 import Map from './pages/Map'
 import NotFound from './pages/NotFound'
+import Login from './pages/Login'
 import HouseDetail from './components/HouseDetail'
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/home" component={Home}></Route>
         <Route path="/citylist" component={CityList}></Route>
         <Route path="/map" component={Map}></Route>
+        <Route path="/login" component={Login}></Route>
         {/* 设置一个房源详情的路由 */}
         <Route path="/detail/:id" component={HouseDetail} />
         {/* 配置404页面 */}

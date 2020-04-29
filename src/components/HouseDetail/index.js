@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Carousel, Flex, Modal, Toast, NavBar, Icon } from 'antd-mobile'
-import axios from 'axios'
+
 import HouseItem from '../HouseItem'
 import styles from './index.module.css'
 import HousePackage from '../HousePackage'
 import { BASE_URL } from '../../utils/axios'
+import {getFilterId} from '../../utils/api/House'
 
 // 猜你喜欢
 const recommendHouses = [
@@ -136,16 +137,16 @@ export default class HouseDetail extends Component {
       isLoading: true
     })
 
-    const res = await axios.get(
-      `${BASE_URL}/houses/5cc47c8d1439630e5b47d45d`
-    )
+    const res = await getFilterId(id)
+    if(res.status === 200) {
+      this.setState({
+        houseInfo: res.data.body,
+        isLoading: false
+      })
 
+    }
     // console.log(res.data.body)
 
-    this.setState({
-      houseInfo: res.data.body,
-      isLoading: false
-    })
 
     const { community, coord } = res.data.body
 
@@ -174,6 +175,7 @@ export default class HouseDetail extends Component {
     const point = new BMap.Point(longitude, latitude)
     map.centerAndZoom(point, 17)
 
+    // 覆盖物 （显示房源位置信息）
     const label = new BMap.Label('', {
       position: point,
       offset: new BMap.Size(0, -36)
@@ -232,7 +234,7 @@ export default class HouseDetail extends Component {
         <NavBar
           mode="dark"
           icon={<Icon type="left" />}
-          onLeftClick={() => console.log('onLeftClick')}
+          onLeftClick={() => this.props.history.goBack()}
           rightContent={[<i key="share" className="iconfont icon-share" />]}
         >
           房屋详情
