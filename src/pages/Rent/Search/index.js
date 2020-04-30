@@ -5,7 +5,7 @@ import { SearchBar } from 'antd-mobile'
 import { getCurCity } from '../../../utils'
 
 import styles from './index.module.css'
-
+import {getCommunity} from '../../../utils/api/city'
 export default class Search extends Component {
 
   state = {
@@ -21,11 +21,20 @@ export default class Search extends Component {
     // 处理空的结果
     if(_val.length === 0) {
       return this.setState({
-        searchTxt: ''
+        searchTxt: '',
+        tipsList:[]
       })
     }
     this.setState({
       searchTxt:_val
+    },async()=> {
+      // 根据关键词搜索小区
+      const res = await getCommunity(this.cityId,this.state.searchTxt)
+      if(res.status === 200) {
+        this.setState({
+          tipsList: res.data
+        })
+      }
     })
   }
 
@@ -42,7 +51,9 @@ export default class Search extends Component {
     const { tipsList } = this.state
 
     return tipsList.map(item => (
-      <li key={item.community} className={styles.tip}>
+      <li onClick={()=> {
+        this.props.history.replace({pathname:'/rent/add',data:{id:item.community,name:item.communityName}})
+      }} key={item.community} className={styles.tip}>
         {item.communityName}
       </li>
     ))

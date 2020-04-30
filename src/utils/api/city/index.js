@@ -18,4 +18,11 @@ export const getCityList = (level = 1) => {
 export function getCityHot() {
     return instance.get('/area/hot')
 }
-
+// 关键词所搜id
+export function getCommunity(id,name) {
+    return instance.get('/area/community',{
+        params: {
+            id,name
+        }
+    })
+}
