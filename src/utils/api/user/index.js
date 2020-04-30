@@ -16,3 +16,12 @@ export function logout() {
 export function getCheckFav(id) {
     return instance.get(`/user/favorites/${id}`)
 }
+// 删除收藏
+export function delFav(id) {
+    return instance.delete(`/user/favorites/${id}`)
+}
+// 添加收藏
+export function addFav(id) {
+    return instance.post(`/user/favorites/${id}`)
+}
+

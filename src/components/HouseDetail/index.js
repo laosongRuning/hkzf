@@ -7,7 +7,8 @@ import HousePackage from '../HousePackage'
 import { BASE_URL } from '../../utils/axios'
 import { getFilterId } from '../../utils/api/House'
 import { isAuth } from '../../utils'
-import {getCheckFav} from '../../utils/api/user/index'
+import { getCheckFav, delFav, addFav } from '../../utils/api/user/index'
+
 // 猜你喜欢
 const recommendHouses = [
   {
@@ -107,7 +108,20 @@ export default class HouseDetail extends Component {
     this.getHouseDetail()
     this.handleFavorite()
   }
-
+  // 检查房子是否收藏过
+  checkHouseFav = async () => {
+    if (!isAuth) return;
+    const { id } = this.props.match.params;
+    let res = await getCheckFav(id);
+    console.log(res)
+    if (res.status === 200) {
+      this.setState({
+        isFavorite: res.data.isFavorite
+      })
+    } else {
+      // 如果token过期，提示用户是否重新登录
+    }
+  }
   // 加载的时候判断，如果是登陆的用户，调用路口，查看当前浏览的房源是否收藏过
   // 处理收藏
   handleFavorite = async () => {
@@ -118,7 +132,7 @@ export default class HouseDetail extends Component {
         { text: '取消' },
         {
           text: '去登录', onPress: async () => {
-            history.push({pathname:'/login', data:{ backUrl: location.pathname }})
+            history.push({ pathname: '/login', data: { backUrl: location.pathname } })
           }
         }
       ])
@@ -133,7 +147,7 @@ export default class HouseDetail extends Component {
         })
       } else {
         // 添加收藏
-        const res = await getCheckFav(id);
+        const res = await addFav(id);
         if (res.status === 200) {
           this.setState({
             isFavorite: true
