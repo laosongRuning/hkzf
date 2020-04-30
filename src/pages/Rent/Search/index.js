@@ -11,8 +11,25 @@ export default class Search extends Component {
   state = {
     // 搜索框的值
     searchTxt: '',
+    // 小区列表数据
     tipsList: []
   }
+  
+  // 搜索框受控（双向绑定）
+  handlerSearch=(val) => {
+    let _val = val.trim()
+    // 处理空的结果
+    if(_val.length === 0) {
+      return this.setState({
+        searchTxt: ''
+      })
+    }
+    this.setState({
+      searchTxt:_val
+    })
+  }
+
+
 
   async componentDidMount() {
     // 获取城市ID
@@ -41,6 +58,7 @@ export default class Search extends Component {
         <SearchBar
           placeholder="请输入小区或地址"
           value={searchTxt}
+          onChange={this.handlerSearch}
           showCancelButton={true}
           onCancel={() => history.replace('/rent/add')}
         />
