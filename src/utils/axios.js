@@ -2,7 +2,7 @@
 import axios from 'axios'
 // 引入ant组件库提示组件
 import { Toast } from 'antd-mobile'
-import {getToken} from './index'
+import { getToken } from './index'
 // 后台接口的基础地址
 // const BASE_URL = 'https://api-haoke-dev.itheima.net';
 const BASE_URL = 'https://api-haoke-web.itheima.net' // 项目部署不支持跨域，换了这个基地址

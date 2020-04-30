@@ -12,3 +12,7 @@ export function getUserInfo() {
 export function logout() {
     return instance.post('/user/logout',null)
 }
+// 根据房源id检查房源是否收藏过
+export function getCheckFav(id) {
+    return instance.get(`/user/favorites/${id}`)
+}

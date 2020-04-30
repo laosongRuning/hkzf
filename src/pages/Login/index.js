@@ -131,7 +131,15 @@ export default withFormik({
       
       setToken(data.token)
       Toast.success(description, 2)
-      formikBag.props.history.push('/home/profile')
+      // 判断是否有回跳地址
+      // if( formikBag.props.location.data && formikBag.props.location.data.backUrl) {
+      // 等价于下面这种写法
+      if( formikBag.props.location.data?.backUrl) {
+        formikBag.props.history.push(formikBag.props.location.data.backUrl)
+      }else { 
+        formikBag.props.history.push('/home/profile')
+
+      }
     } else {
       Toast.fail(description)
     }

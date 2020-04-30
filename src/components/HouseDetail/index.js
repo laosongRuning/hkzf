@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import { Carousel, Flex, Modal, Toast, NavBar, Icon } from 'antd-mobile'
+import { Carousel, Flex, Modal, NavBar, Icon } from 'antd-mobile'
 
 import HouseItem from '../HouseItem'
 import styles from './index.module.css'
 import HousePackage from '../HousePackage'
 import { BASE_URL } from '../../utils/axios'
-import {getFilterId} from '../../utils/api/House'
-
+import { getFilterId } from '../../utils/api/House'
+import { isAuth } from '../../utils'
+import {getCheckFav} from '../../utils/api/user/index'
 // 猜你喜欢
 const recommendHouses = [
   {
@@ -104,7 +105,44 @@ export default class HouseDetail extends Component {
 
     // 获取房屋数据
     this.getHouseDetail()
+    this.handleFavorite()
   }
+
+  // 加载的时候判断，如果是登陆的用户，调用路口，查看当前浏览的房源是否收藏过
+  // 处理收藏
+  handleFavorite = async () => {
+    const { history, match, location } = this.props;
+    console.log(this.props)
+    if (!isAuth()) {
+      alert('提示', '登录后才能收藏房源，是否登录？', [
+        { text: '取消' },
+        {
+          text: '去登录', onPress: async () => {
+            history.push({pathname:'/login', data:{ backUrl: location.pathname }})
+          }
+        }
+      ])
+    } else {
+      const { isFavorite } = this.state;
+      const { id } = match.params;
+      if (isFavorite) {
+        // 删除收藏
+        const res = await delFav(id);
+        res.status === 200 && this.setState({
+          isFavorite: false
+        })
+      } else {
+        // 添加收藏
+        const res = await getCheckFav(id);
+        if (res.status === 200) {
+          this.setState({
+            isFavorite: true
+          })
+        }
+      }
+    }
+  }
+
 
   /* 
       收藏房源：
@@ -138,7 +176,7 @@ export default class HouseDetail extends Component {
     })
 
     const res = await getFilterId(id)
-    if(res.status === 200) {
+    if (res.status === 200) {
       this.setState({
         houseInfo: res.data.body,
         isLoading: false
