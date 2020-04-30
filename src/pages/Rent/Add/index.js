@@ -100,6 +100,13 @@ export default class RentAdd extends Component {
       }
     ])
   }
+  // 处理租金项受控功能
+  handlerInput=(v,name) => {
+    this.setState({
+      [name]: v
+    })
+  }
+
 
   render() {
     const Item = List.Item
@@ -139,22 +146,22 @@ export default class RentAdd extends Component {
           >
             小区名称
           </Item>
-          <InputItem placeholder="请输入租金/月" extra="￥/月" type="number" value={price}>
+          <InputItem placeholder="请输入租金/月" extra="￥/月" type="number" onChange={(v)=>{this.handlerInput(v,'price')}} value={price}>
             租&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金
           </InputItem>
-          <InputItem placeholder="请输入建筑面积" extra="㎡" type="number" value={size}>
+          <InputItem placeholder="请输入建筑面积" extra="㎡" type="number" onChange={(v)=>{this.handlerInput(v,'size')}} value={size}>
             建筑面积
           </InputItem>
-          <Picker data={roomTypeData} value={[roomType]} cols={1}>
+          <Picker data={roomTypeData} onChange={(v)=>{this.handlerInput(v[0],'roomType')}} value={[roomType]} cols={1}>
             <Item arrow="horizontal">
               户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型
             </Item>
           </Picker>
 
-          <Picker data={floorData} value={[floor]} cols={1}>
+          <Picker data={floorData} onChange={(v)=>{this.handlerInput(v[0],'floor')}} value={[floor]} cols={1}>
             <Item arrow="horizontal">所在楼层</Item>
           </Picker>
-          <Picker data={orientedData} value={[oriented]} cols={1}>
+          <Picker data={orientedData} onChange={(v)=>{this.handlerInput(v[0],'oriented')}} value={[oriented]} cols={1}>
             <Item arrow="horizontal">
               朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向
             </Item>
@@ -169,6 +176,7 @@ export default class RentAdd extends Component {
           <InputItem
             placeholder="请输入标题（例如：整租 小区名 2室 5000元）"
             value={title}
+            onChange={(v)=>{this.handlerInput(v,'title')}}
           />
         </List>
 
@@ -202,6 +210,7 @@ export default class RentAdd extends Component {
             placeholder="请输入房屋描述信息"
             autoHeight
             value={description}
+            onChange={(v)=>{this.handlerInput(v,'description')}}
           />
         </List>
 
