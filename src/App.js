@@ -1,12 +1,18 @@
 import React from 'react';
 import { } from 'antd-mobile';
-import { HashRouter as Router, Route, Switch,Redirect} from 'react-router-dom'
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import Home from './pages/Home'
 import CityList from './pages/CityList'
 import Map from './pages/Map'
 import NotFound from './pages/NotFound'
 import Login from './pages/Login'
 import HouseDetail from './components/HouseDetail'
+
+import Rent from './pages/Rent'
+import RentAdd from './pages/Rent/Add'
+import RentSearch from './pages/Rent/Search'
+
+
 function App() {
   return (
     <Router className="App">
@@ -21,6 +27,10 @@ function App() {
         <Route path="/login" component={Login}></Route>
         {/* 设置一个房源详情的路由 */}
         <Route path="/detail/:id" component={HouseDetail} />
+        {/* 发布房源相关 */}
+        <Route path="/rent" exact component={Rent} />
+        <Route path="/rent/add" component={RentAdd} />
+        <Route path="/rent/search" component={RentSearch} />
         {/* 配置404页面 */}
         <Route component={NotFound}></Route>
       </Switch>
