@@ -24,4 +24,8 @@ export function delFav(id) {
 export function addFav(id) {
     return instance.post(`/user/favorites/${id}`)
 }
-
+// 定义用户发布房源的API
+// 获取已发布房源 
+export const getUserHouses = () => {
+  return instance.get('/user/houses')
+}
