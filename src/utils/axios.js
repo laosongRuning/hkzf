@@ -2,7 +2,7 @@
 import axios from 'axios'
 // 引入ant组件库提示组件
 import { Toast } from 'antd-mobile'
-
+import {getToken} from './index'
 // 后台接口的基础地址
 // const BASE_URL = 'https://api-haoke-dev.itheima.net';
 const BASE_URL = 'https://api-haoke-web.itheima.net' // 项目部署不支持跨域，换了这个基地址
@@ -18,6 +18,15 @@ instance.interceptors.request.use(function (config) {
   // Do something before request is sent
   // 开启加载提示
   Toast.loading('加载中',0)
+  // 白名单定义不需要加 token 的接口
+  const {url,headers} = config
+  const whiteName = ['/user/login','/user/registered']
+  // 用户相关的接口需要加 headers
+  if(url.startsWith('/user') &&  !whiteName.includes(url)) {
+    headers.authorization = getToken()
+  }
+
+
   return config;
 }, function (error) {
   // Do something with request error
