@@ -27,3 +27,7 @@ export function getHouseList(cityId,filters,start,end) {
 export function getFilterId(id) {
     return instance.get(`/houses/${id}`)
 }
+// 上传图片
+export function upLoadImgs(fd) {
+    return instance.post(`/houses/image`,fd)
+}
