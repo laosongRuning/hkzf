@@ -17,7 +17,7 @@ import HousePackage from '../../../components/HousePackage'
 
 import styles from './index.module.css'
 import { upLoadImgs } from '../../../utils/api/House'
-
+import {pubHouse} from '../../../utils/api/user'
 const alert = Modal.alert
 
 // 房屋类型
@@ -118,20 +118,62 @@ export default class RentAdd extends Component {
 
   // 发布房源中先调用接口上传图片
   addHouse = async () => {
-    const { tempSlides } = this.state
+    const {
+      community,
+      price,
+      size,
+      roomType,
+      floor,
+      oriented,
+      description,
+      tempSlides,
+      title
+    } = this.state
+    // 获取房屋配套数据
+    let supporting = this.supporting
+    if (!title || !price || !size || tempSlides.length === 0) {
+      return Toast.fail('房源信息不完整！')
+    }
     // 上传图片，获取上传位置
     let houseImg;
-    if (tempSlides.length) {
-      let fm = new FormData();
-      tempSlides.forEach((item) => fm.append('file', item.file));
-      let res = await upLoadImgs(fm);
-      console.log(res)
-      if (res.status === 200) {
-        houseImg = res.data.join('|')
-      } else {
-        Toast.fail(res.description, 2)
-      }
+    // if (tempSlides.length) {
+    let fm = new FormData();
+    tempSlides.forEach((item) => fm.append('file', item.file));
+    let res = await upLoadImgs(fm);
+    // console.log(res)
+    if (res.status === 200) {
+      houseImg = res.data.join('|')
+    } else {
+      Toast.fail(res.description, 2)
     }
+    // }
+    let postData = {
+      community:community.id,
+      price,
+      size,
+      roomType,
+      floor,
+      oriented,
+      description,
+      // tempSlides,
+      houseImg:houseImg,
+      supporting ,
+      title
+    } 
+    let ores = await pubHouse(postData)
+    // console.log('form all data:', otd)
+    if (ores.status === 200) {
+      Toast.success('发布成功！', 1, () => {
+        this.props.history.push('/rent')
+      })
+    }else {
+      if (ores.status === 400) {
+        Toast.info('请重新登录！', 1, () => {
+          // 传入回跳地址
+          this.props.history.push('/login', { backUrl: this.props.location.pathname })
+        })
+      }
+    } 
   }
 
   render() {

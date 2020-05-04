@@ -4,13 +4,13 @@ import instance from '../../axios'
 // import { getToken } from '../../index'
 
 export function login(data) {
-    return instance.post('/user/login',data)
+    return instance.post('/user/login', data)
 }
 export function getUserInfo() {
     return instance.get('/user')
 }
 export function logout() {
-    return instance.post('/user/logout',null)
+    return instance.post('/user/logout', null)
 }
 // 根据房源id检查房源是否收藏过
 export function getCheckFav(id) {
@@ -27,5 +27,9 @@ export function addFav(id) {
 // 定义用户发布房源的API
 // 获取已发布房源 
 export const getUserHouses = () => {
-  return instance.get('/user/houses')
+    return instance.get('/user/houses')
+}
+// 发布房源
+export const pubHouse = (data) => {
+    return instance.post('/user/houses', data)
 }
