@@ -1,5 +1,5 @@
 import React from 'react'
-import './index.scss'
+import styles from './index.module.css'
 import { NavBar, Icon } from 'antd-mobile';
 import { getCurCity } from '../../utils/index'
 class Map extends React.Component {
@@ -35,16 +35,24 @@ class Map extends React.Component {
                 }
                 // 初始化覆盖物实例
                 const label = new BMap.Label(
-                    '欢迎使用百度地图，这是一个简单的文本标注哦~',
+                    null,
                     opts
-                ) 
+                )
+                label.setContent(
+                    `
+                  <div class="${styles.bubble}">
+                    <p class="${styles.bubbleName}">浦东新区</p>
+                    <p>388套</p>
+                  </div>
+                    `
+                )
                 // 创建文本标注对象
                 label.setStyle({
-                    color: 'red',
-                    fontSize: '12px',
-                    height: '20px',
-                    lineHeight: '20px',
-                    fontFamily: '微软雅黑'
+                    border: 'none'
+                })
+                // 添加点击事件
+                label.addEventListener('click', () => {
+                    console.log('覆盖物被点击了', point)
                 })
                 // 调用百度地图实例的addOverlay=》 添加覆盖物到地图
                 map.addOverlay(label)
@@ -54,7 +62,7 @@ class Map extends React.Component {
 
     render() {
         return (
-            <div className="mapBox">
+            <div className={styles.mapBox}>
                 {/* 导航栏 */}
                 <NavBar
                     mode="light"
