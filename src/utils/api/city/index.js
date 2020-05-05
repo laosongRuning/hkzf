@@ -26,3 +26,19 @@ export function getCommunity(id,name) {
         }
     })
 }
+// 地图下钻查询房源信息相关
+// 多用接口  
+/**
+ * 
+ * @param {*} id 
+ * id 城市id=》获取当前城市区的数据
+ *    区id  =？获取当前区下街道数据
+ *    街道id =》获取到当前小区数据
+ */
+export function getMapHouse(id) {
+    return instance.get('/area/map',{
+        params: {
+            id
+        }
+    })
+}
