@@ -60,58 +60,78 @@ class Map extends React.Component {
         }
     }
 
+
+
+
+
+    createRect = (item, nextZoom) => {
+        const {
+            coord: { longitude, latitude },
+            label: areaName,
+            count,
+            value: val
+        } = item
+        // 转换地理位置坐标
+        const ipoint = new this.BMap.Point(longitude, latitude);
+        // 创建文本覆盖物
+        const opts = {
+            position: ipoint, // 指定文本标注所在的地理位置
+            offset: new this.BMap.Size(0, 0) //设置文本偏移量
+        }
+        // 初始化覆盖物实例
+        const label = new this.BMap.Label(
+            null,
+            opts
+        )
+        label.setContent(
+            `
+            <div class="${styles.bubble}">
+            <p class="${styles.bubbleName}">${areaName}</p>
+            <p>${count}套</p>
+            </div>
+            `
+        )
+        // 创建文本标注对象
+        label.setStyle({
+            border: 'none'
+        })
+        // 添加点击事件
+        label.addEventListener('click', () => {
+            // console.log('覆盖物被点击了', point)
+            this.map.centerAndZoom(ipoint, nextZoom)
+            // 清除上一层覆盖物
+            // map.clearOverlays()
+            setTimeout(() => this.map.clearOverlays())
+            this.renderOverlay(val)
+        })
+        // 调用百度地图实例的addOverlay=》 添加覆盖物到地图
+        this.map.addOverlay(label)
+    }
+
+    createCircle=()=> {
+        
+    }
+
     // 渲染覆盖物  城市id  区id  街道id  获取对应数据
     renderOverlay = async (id) => {
         // 根据不同的id获取当前定位城市区的数据
         let { status, data } = await getMapHouse(id)
 
         // 获取一下当前地图的缩放级别
-        this.getTypeAndZoom()
+        const { rect, nextZoom } = this.getTypeAndZoom()
 
         // console.log(res)
         if (status === 200) {
             data.forEach(item => {
-                const {
-                    coord: { longitude, latitude },
-                    label: areaName,
-                    count,
-                    value: val
-                } = item
-                // 转换地理位置坐标
-                const ipoint = new this.BMap.Point(longitude, latitude);
-                // 创建文本覆盖物
-                const opts = {
-                    position: ipoint, // 指定文本标注所在的地理位置
-                    offset: new this.BMap.Size(0, 0) //设置文本偏移量
+                // 根据当前覆盖物的类型,决定调用哪个方法创建覆盖物
+
+                if (rect === 'rect') {
+                    // 小区
+                    this.createRect(item, nextZoom)
+                } else {
+                    // 区和镇
+                    this.createCircle(item)
                 }
-                // 初始化覆盖物实例
-                const label = new this.BMap.Label(
-                    null,
-                    opts
-                )
-                label.setContent(
-                    `
-                    <div class="${styles.bubble}">
-                    <p class="${styles.bubbleName}">${areaName}</p>
-                    <p>${count}套</p>
-                    </div>
-                    `
-                )
-                // 创建文本标注对象
-                label.setStyle({
-                    border: 'none'
-                })
-                // 添加点击事件
-                label.addEventListener('click', () => {
-                    // console.log('覆盖物被点击了', point)
-                    this.map.centerAndZoom(ipoint, 13)
-                    // 清除上一层覆盖物
-                    // map.clearOverlays()
-                    setTimeout(() => this.map.clearOverlays())
-                    this.renderOverlay(val)
-                })
-                // 调用百度地图实例的addOverlay=》 添加覆盖物到地图
-                this.map.addOverlay(label)
             });
         }
     }
